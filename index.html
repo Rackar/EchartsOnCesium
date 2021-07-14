@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入Vue3 实例为Vue -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- Include the CesiumJS JavaScript and CSS files 实例为Cesium -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.83/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.83/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <!-- 引入 ECharts 文件 实例为echarts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div id='app'> 
+
+        <div id="map"></div>
+        <div class="text-center">
+            <div class="bottom">
+              <a-row v-for="legend in legendData" :key="legend.name">
+                <a-col :span="8">
+                  <span
+                    class="lenged-block"
+                    :style="{ 'background-color': legend.color }"
+                    @click="toggleLenged(legend.name)"
+                  >
+                  </span> </a-col
+                ><a-col :span="10">
+                  <span class="lenged-name" @click="toggleLenged(legend.name)">{{
+                    legend.name
+                  }}</span>
+                </a-col>
+              </a-row>
+            </div>
+          </div>
+    </div>
+</body>
+<script>
+const Counter = {
+  data() {
+    return {
+      counter: 0
+    }
+  },
+  mounted() {
+    const viewer = new Cesium.Viewer('map', {
+      terrainProvider: Cesium.createWorldTerrain(),
+      imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+                url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+            })
+    });    
+
+    viewer.camera.flyTo({
+      destination : Cesium.Cartesian3.fromDegrees(116.1169187, 40.242519, 9000),
+      orientation : {
+        heading : Cesium.Math.toRadians(0.0),
+        pitch : Cesium.Math.toRadians(-55.0),
+      }
+    });
+  }
+}
+
+Vue.createApp(Counter).mount('#app')
+</script>
+<style>
+    body{
+        margin:0;
+    }
+    #map{
+        width: 100vw;
+        height:100vh;
+    }
+</style>
+</html>
